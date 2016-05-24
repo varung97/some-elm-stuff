@@ -87,8 +87,11 @@ view {players, ball} =
     board = container (boardWidth + 2 * paddleWidth) boardHeight topLeft <| flow right [pLeftContainer, playingAreaContainer, pRightContainer]
 
     wholeArea = container (boardWidth + leftMargin + 2 * paddleWidth) boardHeight topLeft <| flow right [leftSpacer, board]
+
+    border = flow right [spacer leftMargin 2, color red <| container (boardWidth + 2 * paddleWidth) 2 topLeft empty]
+    new = container (boardWidth + leftMargin + 2 * paddleWidth) (boardHeight + 2) topLeft <| flow down [wholeArea, border]
   in
-    toHtml wholeArea
+    toHtml new
 
 updatePlayersDown : Model -> KeyCode -> Model
 updatePlayersDown model key =

@@ -1,116 +1,355 @@
-var _user$project$Main$viewMessage = function (msg) {
-	return A2(
-		_elm_lang$html$Html$div,
-		_elm_lang$core$Native_List.fromArray(
-			[]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$html$Html$text(msg)
-			]));
-};
-var _user$project$Main$Model = F2(
-	function (a, b) {
-		return {input: a, messages: b};
+var _user$project$Main$jsonToState = F2(
+	function (json, oldModel) {
+		var _p0 = A2(
+			_elm_lang$core$Json_Decode$decodeString,
+			_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$int),
+			json);
+		if (((((_p0.ctor === 'Ok') && (_p0._0.ctor === '::')) && (_p0._0._1.ctor === '::')) && (_p0._0._1._1.ctor === '::')) && (_p0._0._1._1._1.ctor === '[]')) {
+			return _elm_lang$core$Native_Utils.update(
+				oldModel,
+				{
+					players: {
+						ctor: '_Tuple2',
+						_0: {
+							ctor: '_Tuple2',
+							_0: _p0._0._0,
+							_1: _elm_lang$core$Basics$snd(
+								_elm_lang$core$Basics$fst(oldModel.players))
+						},
+						_1: _elm_lang$core$Basics$snd(oldModel.players)
+					},
+					ball: {
+						ctor: '_Tuple2',
+						_0: {ctor: '_Tuple2', _0: _p0._0._1._0, _1: _p0._0._1._1._0},
+						_1: _elm_lang$core$Basics$snd(oldModel.ball)
+					}
+				});
+		} else {
+			return oldModel;
+		}
 	});
-var _user$project$Main$init = {
+var _user$project$Main$stateToJSON = function (_p1) {
+	var _p2 = _p1;
+	var pRight = _elm_lang$core$Basics$fst(
+		_elm_lang$core$Basics$snd(_p2.players));
+	return A2(
+		_elm_lang$core$Json_Encode$encode,
+		0,
+		_elm_lang$core$Json_Encode$list(
+			A2(
+				_elm_lang$core$List$map,
+				_elm_lang$core$Json_Encode$int,
+				_elm_lang$core$Native_List.fromArray(
+					[pRight]))));
+};
+var _user$project$Main$updatePlayersUp = F2(
+	function (model, key) {
+		var _p3 = model.players;
+		var pLeft = _p3._0;
+		var pRight = _p3._1;
+		var _p4 = function () {
+			var _p5 = key;
+			switch (_p5) {
+				case 38:
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Basics$snd(pLeft),
+						_1: 0
+					};
+				case 40:
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Basics$snd(pLeft),
+						_1: 0
+					};
+				default:
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Basics$snd(pLeft),
+						_1: _elm_lang$core$Basics$snd(pRight)
+					};
+			}
+		}();
+		var dirL = _p4._0;
+		var dirR = _p4._1;
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				players: {
+					ctor: '_Tuple2',
+					_0: pLeft,
+					_1: {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Basics$fst(pRight),
+						_1: dirR
+					}
+				}
+			});
+	});
+var _user$project$Main$websocket = 'ws://127.0.0.1:5678/';
+var _user$project$Main$applySendCmd = function (model) {
+	return {
+		ctor: '_Tuple2',
+		_0: model,
+		_1: A2(
+			_elm_lang$websocket$WebSocket$send,
+			_user$project$Main$websocket,
+			_user$project$Main$stateToJSON(model))
+	};
+};
+var _user$project$Main$ballRadius = 20;
+var _user$project$Main$ballDiameter = _user$project$Main$ballRadius * 2;
+var _user$project$Main$playerSpeed = 5;
+var _user$project$Main$updatePlayersDown = F2(
+	function (model, key) {
+		var _p6 = model.players;
+		var pLeft = _p6._0;
+		var pRight = _p6._1;
+		var _p7 = function () {
+			var _p8 = key;
+			switch (_p8) {
+				case 38:
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Basics$snd(pLeft),
+						_1: _user$project$Main$playerSpeed
+					};
+				case 40:
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Basics$snd(pLeft),
+						_1: _elm_lang$core$Basics$negate(_user$project$Main$playerSpeed)
+					};
+				default:
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Basics$snd(pLeft),
+						_1: _elm_lang$core$Basics$snd(pRight)
+					};
+			}
+		}();
+		var dirL = _p7._0;
+		var dirR = _p7._1;
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				players: {
+					ctor: '_Tuple2',
+					_0: pLeft,
+					_1: {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Basics$fst(pRight),
+						_1: dirR
+					}
+				}
+			});
+	});
+var _user$project$Main$leftMargin = 100;
+var _user$project$Main$boardWidth = 500;
+var _user$project$Main$halfWidth = (_user$project$Main$boardWidth / 2) | 0;
+var _user$project$Main$boardHeight = 300;
+var _user$project$Main$halfHeight = (_user$project$Main$boardHeight / 2) | 0;
+var _user$project$Main$init_state = {
 	ctor: '_Tuple2',
-	_0: A2(
-		_user$project$Main$Model,
-		'',
-		_elm_lang$core$Native_List.fromArray(
-			[])),
+	_0: {
+		players: {
+			ctor: '_Tuple2',
+			_0: {ctor: '_Tuple2', _0: _user$project$Main$halfHeight, _1: 0},
+			_1: {ctor: '_Tuple2', _0: _user$project$Main$halfHeight, _1: 0}
+		},
+		ball: {
+			ctor: '_Tuple2',
+			_0: {ctor: '_Tuple2', _0: _user$project$Main$halfWidth - _user$project$Main$ballRadius, _1: _user$project$Main$halfHeight - _user$project$Main$ballRadius},
+			_1: {ctor: '_Tuple2', _0: 0, _1: 0}
+		}
+	},
 	_1: _elm_lang$core$Platform_Cmd$none
 };
+var _user$project$Main$init = _user$project$Main$init_state;
+var _user$project$Main$paddleHeight = 100;
+var _user$project$Main$halfPaddleHeight = (_user$project$Main$paddleHeight / 2) | 0;
+var _user$project$Main$updatePlayers = function (_p9) {
+	var _p10 = _p9;
+	var _p11 = _p10._1;
+	var updatedPRight = _elm_lang$core$Basics$fst(_p11) + _elm_lang$core$Basics$snd(_p11);
+	var newPRight = ((_elm_lang$core$Native_Utils.cmp(updatedPRight + _user$project$Main$halfPaddleHeight, _user$project$Main$boardHeight) > 0) || (_elm_lang$core$Native_Utils.cmp(updatedPRight - _user$project$Main$halfPaddleHeight, 0) < 0)) ? _elm_lang$core$Basics$fst(_p11) : updatedPRight;
+	return {
+		ctor: '_Tuple2',
+		_0: _p10._0,
+		_1: {
+			ctor: '_Tuple2',
+			_0: newPRight,
+			_1: _elm_lang$core$Basics$snd(_p11)
+		}
+	};
+};
+var _user$project$Main$updateState = function (model) {
+	var players = model.players;
+	var updatedPlayers = _user$project$Main$updatePlayers(players);
+	var state = _user$project$Main$applySendCmd(
+		_elm_lang$core$Native_Utils.update(
+			model,
+			{players: updatedPlayers}));
+	return state;
+};
 var _user$project$Main$update = F2(
-	function (msg, _p0) {
-		var _p1 = _p0;
-		var _p4 = _p1.messages;
-		var _p3 = _p1.input;
-		var _p2 = msg;
-		switch (_p2.ctor) {
-			case 'Input':
+	function (msg, model) {
+		var _p12 = msg;
+		switch (_p12.ctor) {
+			case 'KeyDown':
 				return {
 					ctor: '_Tuple2',
-					_0: A2(_user$project$Main$Model, _p2._0, _p4),
+					_0: A2(_user$project$Main$updatePlayersDown, model, _p12._0),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
-			case 'Send':
+			case 'KeyUp':
 				return {
 					ctor: '_Tuple2',
-					_0: A2(_user$project$Main$Model, '', _p4),
-					_1: A2(_elm_lang$websocket$WebSocket$send, 'ws://localhost:8765/', _p3)
-				};
-			case 'NewMessage':
-				return {
-					ctor: '_Tuple2',
-					_0: A2(
-						_user$project$Main$Model,
-						_p3,
-						A2(_elm_lang$core$List_ops['::'], _p2._0, _p4)),
+					_0: A2(_user$project$Main$updatePlayersUp, model, _p12._0),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
+			case 'Tick':
+				return _user$project$Main$updateState(model);
 			default:
 				return {
 					ctor: '_Tuple2',
-					_0: A2(_user$project$Main$Model, _p3, _p4),
-					_1: A2(_elm_lang$websocket$WebSocket$send, 'ws://localhost:8765/', _p3)
+					_0: A2(_user$project$Main$jsonToState, _p12._0, model),
+					_1: _elm_lang$core$Platform_Cmd$none
 				};
 		}
 	});
+var _user$project$Main$paddleWidth = 20;
+var _user$project$Main$view = function (_p13) {
+	var _p14 = _p13;
+	var border = A2(
+		_evancz$elm_graphics$Element$flow,
+		_evancz$elm_graphics$Element$right,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(_evancz$elm_graphics$Element$spacer, _user$project$Main$leftMargin, 2),
+				A2(
+				_evancz$elm_graphics$Element$color,
+				_elm_lang$core$Color$red,
+				A4(_evancz$elm_graphics$Element$container, _user$project$Main$boardWidth + (2 * _user$project$Main$paddleWidth), 2, _evancz$elm_graphics$Element$topLeft, _evancz$elm_graphics$Element$empty))
+			]));
+	var leftSpacer = A2(_evancz$elm_graphics$Element$spacer, _user$project$Main$leftMargin, _user$project$Main$boardHeight);
+	var ballElem = A3(
+		_evancz$elm_graphics$Collage$collage,
+		_user$project$Main$ballDiameter,
+		_user$project$Main$ballDiameter,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_evancz$elm_graphics$Collage$filled,
+				_elm_lang$core$Color$black,
+				_evancz$elm_graphics$Collage$circle(_user$project$Main$ballRadius))
+			]));
+	var _p15 = _p14.ball;
+	var ballX = _p15._0._0;
+	var ballY = _p15._0._1;
+	var ballXVel = _p15._1._0;
+	var ballYVel = _p15._1._1;
+	var ballPos = A2(
+		_evancz$elm_graphics$Element$bottomLeftAt,
+		_evancz$elm_graphics$Element$absolute(ballX - _user$project$Main$ballRadius),
+		_evancz$elm_graphics$Element$absolute(ballY - _user$project$Main$ballRadius));
+	var playingAreaContainer = A4(_evancz$elm_graphics$Element$container, _user$project$Main$boardWidth, _user$project$Main$boardHeight, ballPos, ballElem);
+	var _p16 = _p14.players;
+	var pLeft = _p16._0._0;
+	var pLeftDir = _p16._0._1;
+	var pRight = _p16._1._0;
+	var pRightDir = _p16._1._1;
+	var pLeftPos = A2(
+		_evancz$elm_graphics$Element$bottomLeftAt,
+		_evancz$elm_graphics$Element$absolute(0),
+		_evancz$elm_graphics$Element$absolute(pLeft - _user$project$Main$halfPaddleHeight));
+	var pLeftContainer = A4(
+		_evancz$elm_graphics$Element$container,
+		_user$project$Main$paddleWidth,
+		_user$project$Main$boardHeight,
+		pLeftPos,
+		A2(
+			_evancz$elm_graphics$Element$color,
+			_elm_lang$core$Color$blue,
+			A4(_evancz$elm_graphics$Element$container, _user$project$Main$paddleWidth, _user$project$Main$paddleHeight, _evancz$elm_graphics$Element$middle, _evancz$elm_graphics$Element$empty)));
+	var pRightPos = A2(
+		_evancz$elm_graphics$Element$bottomLeftAt,
+		_evancz$elm_graphics$Element$absolute(0),
+		_evancz$elm_graphics$Element$absolute(pRight - _user$project$Main$halfPaddleHeight));
+	var pRightContainer = A4(
+		_evancz$elm_graphics$Element$container,
+		_user$project$Main$paddleWidth,
+		_user$project$Main$boardHeight,
+		pRightPos,
+		A2(
+			_evancz$elm_graphics$Element$color,
+			_elm_lang$core$Color$blue,
+			A4(_evancz$elm_graphics$Element$container, _user$project$Main$paddleWidth, _user$project$Main$paddleHeight, _evancz$elm_graphics$Element$middle, _evancz$elm_graphics$Element$empty)));
+	var board = A4(
+		_evancz$elm_graphics$Element$container,
+		_user$project$Main$boardWidth + (2 * _user$project$Main$paddleWidth),
+		_user$project$Main$boardHeight,
+		_evancz$elm_graphics$Element$topLeft,
+		A2(
+			_evancz$elm_graphics$Element$flow,
+			_evancz$elm_graphics$Element$right,
+			_elm_lang$core$Native_List.fromArray(
+				[pLeftContainer, playingAreaContainer, pRightContainer])));
+	var wholeArea = A4(
+		_evancz$elm_graphics$Element$container,
+		(_user$project$Main$boardWidth + _user$project$Main$leftMargin) + (2 * _user$project$Main$paddleWidth),
+		_user$project$Main$boardHeight,
+		_evancz$elm_graphics$Element$topLeft,
+		A2(
+			_evancz$elm_graphics$Element$flow,
+			_evancz$elm_graphics$Element$right,
+			_elm_lang$core$Native_List.fromArray(
+				[leftSpacer, board])));
+	var $new = A4(
+		_evancz$elm_graphics$Element$container,
+		(_user$project$Main$boardWidth + _user$project$Main$leftMargin) + (2 * _user$project$Main$paddleWidth),
+		_user$project$Main$boardHeight + 2,
+		_evancz$elm_graphics$Element$topLeft,
+		A2(
+			_evancz$elm_graphics$Element$flow,
+			_evancz$elm_graphics$Element$down,
+			_elm_lang$core$Native_List.fromArray(
+				[wholeArea, border])));
+	return _evancz$elm_graphics$Element$toHtml($new);
+};
+var _user$project$Main$Model = F2(
+	function (a, b) {
+		return {players: a, ball: b};
+	});
+var _user$project$Main$NewMessage = function (a) {
+	return {ctor: 'NewMessage', _0: a};
+};
 var _user$project$Main$Tick = function (a) {
 	return {ctor: 'Tick', _0: a};
 };
-var _user$project$Main$NewMessage = function (a) {
-	return {ctor: 'NewMessage', _0: a};
+var _user$project$Main$KeyUp = function (a) {
+	return {ctor: 'KeyUp', _0: a};
+};
+var _user$project$Main$KeyDown = function (a) {
+	return {ctor: 'KeyDown', _0: a};
 };
 var _user$project$Main$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$batch(
 		_elm_lang$core$Native_List.fromArray(
 			[
 				A2(_elm_lang$core$Time$every, _elm_lang$core$Time$millisecond * 20, _user$project$Main$Tick),
-				A2(_elm_lang$websocket$WebSocket$listen, 'ws://localhost:8765/', _user$project$Main$NewMessage)
-			]));
-};
-var _user$project$Main$Send = {ctor: 'Send'};
-var _user$project$Main$Input = function (a) {
-	return {ctor: 'Input', _0: a};
-};
-var _user$project$Main$view = function (model) {
-	return A2(
-		_elm_lang$html$Html$div,
-		_elm_lang$core$Native_List.fromArray(
-			[]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				A2(
-				_elm_lang$html$Html$input,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Events$onInput(_user$project$Main$Input)
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[])),
-				A2(
-				_elm_lang$html$Html$button,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Events$onClick(_user$project$Main$Send)
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('Send')
-					])),
-				A2(
-				_elm_lang$html$Html$div,
-				_elm_lang$core$Native_List.fromArray(
-					[]),
-				A2(
-					_elm_lang$core$List$map,
-					_user$project$Main$viewMessage,
-					_elm_lang$core$List$reverse(model.messages)))
+				_elm_lang$keyboard$Keyboard$downs(_user$project$Main$KeyDown),
+				_elm_lang$keyboard$Keyboard$ups(_user$project$Main$KeyUp),
+				A2(_elm_lang$websocket$WebSocket$listen, _user$project$Main$websocket, _user$project$Main$NewMessage)
 			]));
 };
 var _user$project$Main$main = {
 	main: _elm_lang$html$Html_App$program(
-		{init: _user$project$Main$init, view: _user$project$Main$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions})
+		{init: _user$project$Main$init, subscriptions: _user$project$Main$subscriptions, update: _user$project$Main$update, view: _user$project$Main$view})
+};
+var _user$project$Main$PRight = function (a) {
+	return {ctor: 'PRight', _0: a};
+};
+var _user$project$Main$PLeft = function (a) {
+	return {ctor: 'PLeft', _0: a};
 };
