@@ -1,0 +1,61 @@
+var _user$project$Counter$countStyle = _elm_lang$html$Html_Attributes$style(
+	_elm_lang$core$Native_List.fromArray(
+		[
+			{ctor: '_Tuple2', _0: 'font-size', _1: '20px'},
+			{ctor: '_Tuple2', _0: 'font-family', _1: 'monospace'},
+			{ctor: '_Tuple2', _0: 'display', _1: 'inline-block'},
+			{ctor: '_Tuple2', _0: 'width', _1: '50px'},
+			{ctor: '_Tuple2', _0: 'text-align', _1: 'center'}
+		]));
+var _user$project$Counter$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		if (_p0.ctor === 'Increment') {
+			return model + 1;
+		} else {
+			return model - 1;
+		}
+	});
+var _user$project$Counter$init = function (count) {
+	return count;
+};
+var _user$project$Counter$Decrement = {ctor: 'Decrement'};
+var _user$project$Counter$Increment = {ctor: 'Increment'};
+var _user$project$Counter$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$button,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Events$onClick(_user$project$Counter$Decrement)
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('-')
+					])),
+				A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[_user$project$Counter$countStyle]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(
+						_elm_lang$core$Basics$toString(model))
+					])),
+				A2(
+				_elm_lang$html$Html$button,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Events$onClick(_user$project$Counter$Increment)
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('+')
+					]))
+			]));
+};
