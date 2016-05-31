@@ -27,18 +27,6 @@ view model =
 displayDie : Die -> Html Msg
 displayDie val = img [style [("width", "100px"), ("height", "100px"), ("display", "block")], src <| diePath ++ toString val ++ ".png"] []
 
--- update : Msg -> Model -> (Model, Cmd Msg)
--- update msg model =
---   case msg of
---     Roll diceIdx ->
---       (model, Random.generate (NewFaceRoll diceIdx) (Random.int 1 6))
---
---     NewFaceRoll diceIdx newFace ->
---       if diceIdx == numDice - 1 then
---         (List.take (numDice - 1) model ++ [newFace], Cmd.none)
---       else
---         (List.take diceIdx model ++ [newFace] ++ List.drop (diceIdx + 1) model, Random.generate (NewFaceRoll (diceIdx + 1)) (Random.int 1 6))
-
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
