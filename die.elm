@@ -1,4 +1,4 @@
-module Die1 exposing (Model, Msg, init, update, view)
+module Die exposing (Model, Msg, init, update, view)
 
 import Html exposing (..)
 import Html.App as Html
